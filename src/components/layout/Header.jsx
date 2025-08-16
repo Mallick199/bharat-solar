@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Zap, Leaf, Menu, X } from 'lucide-react';
+import { Sun, Zap, Leaf, Menu, X, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input'; // If using shadcn/ui Input
 import logo from '../../pages/solor/solar-energy_8820867.png';
 
 const navLinks = [
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about' },
   { name: 'Services', path: '/products-services' },
-  { name: 'Technology', path: '/how-it-works' },
   { name: 'Projects', path: '/gallery' },
   { name: 'Blog', path: '/blog' },
   { name: 'Contact', path: '/contact' },
@@ -18,6 +18,7 @@ const navLinks = [
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState('');
   const location = useLocation();
 
   React.useEffect(() => {
@@ -30,6 +31,14 @@ const Header = () => {
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      console.log('Searching for:', searchQuery);
+      // navigate(`/search?query=${searchQuery}`) if search page exists
+    }
+  };
+
   return (
     <motion.header
       initial={{ y: -100, opacity: 0 }}
@@ -40,7 +49,7 @@ const Header = () => {
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           {/* Logo Section */}
           <Link to="/" className="flex items-center gap-3 group">
             <div className="relative">
@@ -51,185 +60,59 @@ const Header = () => {
                   isScrolled ? 'h-10 w-10' : 'h-12 w-12'
                 }`}
               />
-              {/* <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="absolute -bottom-1 -right-1 bg-yellow-400 rounded-full p-1"
-              >
-                <Zap className="h-3 w-3 text-white" />
-              </motion.div> */}
             </div>
             
+            {/* Animated Text Section (unchanged) */}
             <div className="flex flex-col">
             <motion.span 
-  className={`font-bold tracking-tight ${
-    isScrolled ? 'text-2xl' : 'text-3xl'
-  }`}
->
-<span className="relative inline-block overflow-hidden">
-  <motion.div className="relative">
-    {/* Container for animated letters */}
-    <div className="flex">
-      {"BHARAT SOLAR SOLUTION".split("").map((letter, index) => (
-        <motion.span
-          key={index}
-          className="block bg-clip-text text-transparent bg-gradient-to-r from-orange-600 via-amber-200 to-green-600"
-          initial={{ 
-            y: -20, 
-            opacity: 0,
-            backgroundPosition: '0% 50%'
-          }}
-          animate={{ 
-            y: 0, 
-            opacity: 1,
-            backgroundPosition: '100% 50%'
-          }}
-          transition={{
-            y: {
-              duration: 0.3,
-              delay: index * 0.1,
-              ease: "backOut"
-            },
-            opacity: {
-              duration: 0.4,
-              delay: index * 0.1,
-              ease: "circOut"
-            },
-            backgroundPosition: {
-              duration: 6,
-              repeat: Infinity,
-              ease: "linear",
-              delay: index * 0.02
-            }
-          }}
-          style={{
-            backgroundSize: '200% 200%',
-            textShadow: '0 2px 4px rgba(0,0,0,0.1)',
-            fontSize: '22px',
-            fontWeight: 'bold',
-            WebkitTextFillColor: 'transparent',
-            WebkitBackgroundClip: 'text'
-          }}
-        >
-          {letter === ' ' ? '\u00A0' : letter}
-        </motion.span>
-      ))}
-    </div>
-
-    {/* Shining overlay effect - now applied to each letter */}
-    <div className="flex absolute inset-0 pointer-events-none">
-      {"BHARAT SOLAR SOLUTION".split("").map((letter, index) => (
-        <motion.span
-          key={index}
-          className="bg-gradient-to-r from-transparent via-white/50 to-transparent bg-clip-text text-transparent"
-          initial={{ 
-            x: '-100%',
-            opacity: 0
-          }}
-          animate={{ 
-            x: ['-100%', '100%'],
-            opacity: [0, 0.7, 0]
-          }}
-          transition={{
-            x: {
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1 + index * 0.05
-            },
-            opacity: {
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1 + index * 0.05
-            }
-          }}
-          style={{
-            backgroundSize: '200% 200%',
-            fontSize: '20px',
-            WebkitTextFillColor: 'transparent',
-            WebkitBackgroundClip: 'text'
-          }}
-        >
-          {letter === ' ' ? '\u00A0' : letter}
-        </motion.span>
-      ))}
-    </div>
-  </motion.div>
-    
-  {/* Ashoka Chakra effect (blue wheel) */}
-  <motion.span 
-    className="absolute -right-6 top-1/2 -translate-y-1/2"
-    animate={{
-      rotate: 360
-    }}
-    transition={{
-      duration: 16,
-      repeat: Infinity,
-      ease: "linear"
-    }}
-  >
-    <svg 
-      width={isScrolled ? 16 : 20} 
-      height={isScrolled ? 16 : 20} 
-      viewBox="0 0 24 24"
-      className="text-blue-600"
-    >
-      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
-      {[...Array(24)].map((_, i) => (
-        <line 
-          key={i}
-          x1="12" 
-          y1="2" 
-          x2="12" 
-          y2="4" 
-          stroke="currentColor" 
-          strokeWidth="1"
-          transform={`rotate(${i * 15} 12 12)`}
-        />
-      ))}
-    </svg>
-  </motion.span>
-</span>
-</motion.span>
-              
+              className={`font-bold tracking-tight whitespace-nowrap ${
+                isScrolled ? 'text-2xl' : 'text-2xl'
+              }`}
+            >
+              <span className="bg-gradient-to-r from-orange-600 via-amber-300 to-green-600 bg-clip-text text-transparent drop-shadow-sm">
+                BHARAT SOLAR SOLUTION
+              </span>
+            </motion.span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-1">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.name}
-                to={link.path}
-                className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors ${
-                  location.pathname === link.path 
-                    ? 'text-blue-600' 
-                    : 'text-gray-700 hover:text-blue-600'
-                }`}
-              >
-                {link.name}
-                {location.pathname === link.path && (
-                  <motion.span 
-                    layoutId="nav-underline"
-                    className="absolute left-0 bottom-0 w-full h-0.5 bg-blue-600"
-                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                  />
-                )}
-              </Link>
-            ))}
-            
-            {/* <div className="ml-4">
-              <Link to="/quote-request">
-                <Button 
-                  variant="default" 
-                  className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 shadow-md hover:shadow-lg transition-all"
+          {/* Desktop Navigation + Search */}
+          <div className="hidden lg:flex items-center space-x-4">
+            <nav className="flex items-center space-x-1">
+              {navLinks.map((link) => (
+                <Link 
+                  key={link.name}
+                  to={link.path}
+                  className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                    location.pathname === link.path 
+                      ? 'text-blue-600' 
+                      : 'text-gray-700 hover:text-blue-600'
+                  }`}
                 >
-                  <Zap className="mr-2 h-4 w-4" /> Free Consultation
-                </Button>
-              </Link>
-            </div> */}
-          </nav>
+                  {link.name}
+                  {location.pathname === link.path && (
+                    <motion.span 
+                      layoutId="nav-underline"
+                      className="absolute left-0 bottom-0 w-full h-0.5 bg-blue-600"
+                      transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Search Bar */}
+            <form onSubmit={handleSearch} className="relative">
+              <Input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-2 w-48 rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+            </form>
+          </div>
 
           {/* Mobile Menu Button */}
           <div className="lg:hidden">
@@ -273,16 +156,18 @@ const Header = () => {
                     {link.name}
                   </Link>
                 ))}
-                <div className="pt-2">
-                  <Link to="/quote-request" onClick={toggleMobileMenu}>
-                    <Button 
-                      variant="default" 
-                      className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600"
-                    >
-                      <Zap className="mr-2 h-4 w-4" /> Free Consultation
-                    </Button>
-                  </Link>
-                </div>
+
+                {/* Mobile Search Bar */}
+                <form onSubmit={handleSearch} className="relative px-4">
+                  <Input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 pr-4 py-2 w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 transition-all"
+                  />
+                  <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+                </form>
               </nav>
             </motion.div>
           )}

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChevronLeft, ChevronRight, Star, Zap, Sun, Battery, Home, HardHat, Clock, DollarSign, ShieldCheck, Users } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, Zap, Sun, Battery, Home, HardHat, Clock, ShieldCheck, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const HomePage = () => {
@@ -11,7 +11,21 @@ const HomePage = () => {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 1 } }
   };
-  {/* Counter Component (add this to your components) */ }
+
+  const slideUp = {
+    hidden: { y: 50, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.8 } }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2 }
+    }
+  };
+
+  // Counter Component
   const Counter = ({ target, duration = 2 }) => {
     const [count, setCount] = useState(0);
 
@@ -34,33 +48,6 @@ const HomePage = () => {
 
     return <span>{count.toLocaleString()}</span>;
   };
-  const slideUp = {
-    hidden: { y: 50, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.8 } }
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  // Solar solutions data
-  const solarSolutions = [
-    "Residential Solar",
-    "Commercial Solar",
-    "Solar Water Pumps",
-    "Solar Street Lights",
-    "Solar Inverters",
-    "Solar Batteries",
-    "Solar Panels",
-    "Government Schemes",
-    "Solar Subsidies"
-  ];
 
   // Featured solar products
   const featuredProducts = [
@@ -142,82 +129,90 @@ const HomePage = () => {
     setCurrentSlide(index);
   };
 
+  // ===== Category Scroller with Arrow Buttons =====
+  const scrollRef = useRef(null);
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -300 : 300,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const categorySolutions = [
+    { name: "Residential Solar", icon: "https://img.icons8.com/fluency/48/solar-panel.png" },
+    { name: "Commercial Solar", icon: "https://img.icons8.com/color/48/office-building.png" },
+    { name: "Industrial Solar", icon: "https://img.icons8.com/external-flaticons-flat-flat-icons/64/external-industry-industry-flaticons-flat-flat-icons.png" },
+    { name: "Solar Water Pumps", icon: "https://img.icons8.com/color/48/water-pump.png" },
+    { name: "Solar Street Lights", icon: "https://img.icons8.com/color/48/street-light.png" },
+    { name: "Solar Inverters", icon: "https://img.icons8.com/color/48/electricity.png" },
+    { name: "Solar Batteries", icon: "https://img.icons8.com/color/48/battery-full.png" },
+    { name: "Solar Panels", icon: "https://img.icons8.com/color/48/solar-panel2.png" },
+    { name: "Solar Heaters", icon: "https://img.icons8.com/color/48/boiler.png" },
+    { name: "EV Charging", icon: "https://img.icons8.com/color/48/charging-battery.png" },
+    { name: "Solar Farms", icon: "https://img.icons8.com/color/48/renewable-energy.png" },
+    { name: "Off-Grid Systems", icon: "https://img.icons8.com/fluency/48/no-connection.png" },
+    { name: "On-Grid Systems", icon: "https://img.icons8.com/color/48/power-plant.png" },
+    { name: "Hybrid Systems", icon: "https://img.icons8.com/color/48/smart-home-automation.png" },
+    { name: "Government Schemes", icon: "https://img.icons8.com/color/48/government-building.png" },
+    { name: "Solar Subsidies", icon: "https://img.icons8.com/color/48/money-bag.png" },
+    { name: "Solar Installation", icon: "https://img.icons8.com/color/48/worker-male--v1.png" },
+    { name: "Solar Maintenance", icon: "https://img.icons8.com/color/48/wrench.png" },
+    { name: "Environment Friendly", icon: "https://img.icons8.com/color/48/earth-planet.png" },
+  ];
+
   return (
     <div className="overflow-x-hidden bg-gray-50">
-      {/* Hero Section */}
-      <section className="py-8 bg-white">
-  <div className="container px-4">
-    <div className="relative overflow-hidden">
-      <div className="flex overflow-x-auto pb-4 scrollbar-hide">
-        <div className="flex space-x-6 animate-scroll-slow">
-          {[
-            {
-              name: "Residential Solar",
-              icon: "https://img.icons8.com/fluency/48/solar-panel.png",
-            },
-            {
-              name: "Commercial Solar",
-              icon: "https://img.icons8.com/color/48/office-building.png",
-            },
-            {
-              name: "Solar Water Pumps",
-              icon: "https://img.icons8.com/color/48/water-pump.png",
-            },
-            {
-              name: "Solar Street Lights",
-              icon: "https://img.icons8.com/color/48/street-light.png",
-            },
-            {
-              name: "Solar Inverters",
-              icon: "https://img.icons8.com/color/48/electricity.png",
-            },
-            {
-              name: "Solar Batteries",
-              icon: "https://img.icons8.com/color/48/battery-full.png",
-            },
-            {
-              name: "Solar Panels",
-              icon: "https://img.icons8.com/color/48/solar-panel2.png",
-            },
-            {
-              name: "Government Schemes",
-              icon: "https://img.icons8.com/color/48/government-building.png",
-            },
-            {
-              name: "Solar Subsidies",
-              icon: "https://img.icons8.com/color/48/money-bag.png",
-            }, {
-              name: "Government Schemes",
-              icon: "https://img.icons8.com/color/48/government-building.png",
-            },
-            {
-              name: "Solar Subsidies",
-              icon: "https://img.icons8.com/color/48/money-bag.png",
-            }
-          ].map((solution, index) => (
-            <motion.div
-              key={index}
-              initial="hidden"
-              whileInView="visible"
-              variants={fadeIn}
-              viewport={{ once: true }}
-              className="flex flex-col items-center min-w-[100px] flex-shrink-0"
-            >
-              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-2 p-3 shadow-sm hover:shadow-md transition-shadow">
-                <img
-                  src={solution.icon}
-                  alt={solution.name}
-                  className="w-8 h-8 object-contain"
-                />
-              </div>
-              <span className="text-sm font-medium text-center">{solution.name}</span>
-            </motion.div>
-          ))}
+      {/* ===== Category Scroller with Arrows ===== */}
+      <section className="py-8 bg-white relative">
+        <div className="container px-4 relative">
+          {/* Left Arrow */}
+          <button
+            onClick={() => scroll("left")}
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-md p-2 rounded-full z-10 hover:bg-gray-100"
+          >
+            <ChevronLeft className="w-6 h-6 text-gray-700" />
+          </button>
+
+          {/* Scrollable Categories */}
+          <div ref={scrollRef} className="flex overflow-x-auto pb-4 scrollbar-hide scroll-smooth">
+            <div className="flex space-x-6">
+              {categorySolutions.map((solution, index) => (
+                <motion.div
+                  key={index}
+                  initial="hidden"
+                  whileInView="visible"
+                  variants={fadeIn}
+                  viewport={{ once: true }}
+                  className="flex flex-col items-center min-w-[100px] flex-shrink-0"
+                >
+                  <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-2 p-3 shadow-sm hover:shadow-md transition-shadow">
+                    <img
+                      src={solution.icon}
+                      alt={solution.name}
+                      className="w-8 h-8 object-contain"
+                    />
+                  </div>
+                  <span className="text-sm font-medium text-center">
+                    {solution.name}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Arrow */}
+          <button
+            onClick={() => scroll("right")}
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-md p-2 rounded-full z-10 hover:bg-gray-100"
+          >
+            <ChevronRight className="w-6 h-6 text-gray-700" />
+          </button>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
+
+
 
 <style jsx>{`
   .animate-scroll-slow {
@@ -243,56 +238,66 @@ const HomePage = () => {
     scrollbar-width: none;
   }
 `}</style>
-<section className="relative h-[500px] text-white overflow-hidden">
-  {/* Scrolling Photo Gallery - Now with better visibility */}
-  <div className="absolute inset-0 flex">
-    {[
-      "https://cdn.britannica.com/94/192794-050-3F3F3DDD/panels-electricity-order-sunlight.jpg",
-      "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d",
-      "https://images.unsplash.com/photo-1588854337236-6889d631faa8",
-      "https://images.unsplash.com/photo-1566837946088-5f0e0b1b8e0f",
-      "https://images.unsplash.com/photo-1581093196276-1a1b58b9a5e4",
-      "https://images.unsplash.com/photo-1473966968600-fa801b869a1a"
-    ].map((img, index) => (
-      <div 
-        key={index}
-        className="h-full w-full flex-shrink-0 relative"
-      >
-        <img
-          src={`${img}?auto=format&fit=crop&w=1200&q=80`}
-          alt={`Solar installation ${index + 1}`}
-          className="w-full h-full object-cover brightness-75"
-          loading="lazy"
-        />
-      </div>
-    ))}
+<section className="relative h-[400px] text-white overflow-hidden">
+  {/* Photo Slider */}
+  <div className="absolute inset-0">
+    <AnimatePresence mode="wait">
+      <motion.img
+        key={currentSlide}
+        src={[
+          "https://cdn.britannica.com/94/192794-050-3F3F3DDD/panels-electricity-order-sunlight.jpg",
+          "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d",
+          "https://images.unsplash.com/photo-1588854337236-6889d631faa8",
+          "https://images.unsplash.com/photo-1566837946088-5f0e0b1b8e0f",
+          "https://images.unsplash.com/photo-1581093196276-1a1b58b9a5e4",
+          "https://images.unsplash.com/photo-1473966968600-fa801b869a1a"
+        ][currentSlide]}
+        alt={`Solar installation ${currentSlide + 1}`}
+        className="w-full h-full object-cover brightness-[0.65] absolute inset-0"
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1 }}
+      />
+    </AnimatePresence>
   </div>
 
-  {/* Lighter Gradient Overlay */}
-  <div className="absolute inset-0 bg-gradient-to-r from-blue-900/40 to-teal-800/40" />
+  {/* Gradient Overlay */}
+  <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
 
   {/* Content */}
-  <div className="container h-full flex flex-col justify-center px-4 relative z-10">
+  <div className="container h-full flex flex-col justify-center px-6 relative z-10">
     <motion.div
       initial="hidden"
       whileInView="visible"
       variants={staggerContainer}
       viewport={{ once: true }}
+      className="max-w-3xl"
     >
-      <motion.h1 variants={slideUp} className="text-4xl font-bold mb-4">
-        Power Your Future With Solar Energy
+      <motion.h1
+        variants={slideUp}
+        className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight drop-shadow-lg"
+      >
+        Power Your Future <br /> With Solar Energy
       </motion.h1>
-      <motion.p variants={slideUp} className="text-xl mb-8 max-w-2xl">
-        India's leading solar solutions provider with government-approved installations and subsidies
+      <motion.p
+        variants={slideUp}
+        className="text-lg md:text-xl mb-10 max-w-2xl text-gray-200 leading-relaxed"
+      >
+        India’s leading solar solutions provider with government-approved
+        installations and subsidy support.
       </motion.p>
       <motion.div variants={slideUp} className="flex flex-wrap gap-4">
         <Link to="/quote">
-          <Button className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 px-8 py-6 text-lg">
+          <Button className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-8 py-6 text-lg shadow-lg rounded-xl transition">
             Get Free Consultation
           </Button>
         </Link>
         <Link to="/schemes">
-          <Button variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-6 text-lg">
+          <Button
+            variant="outline"
+            className="border-2 border-white text-white hover:bg-white/10 px-8 py-6 text-lg font-medium rounded-xl transition"
+          >
             Check Subsidy Eligibility
           </Button>
         </Link>
@@ -300,367 +305,500 @@ const HomePage = () => {
     </motion.div>
   </div>
 
-  <style jsx>{`
-    .absolute.inset-0.flex {
-      animation: scroll 60s linear infinite;
-      width: calc(600%);
-    }
-    
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(calc(-100% + 100vw)); }
-    }
-  `}</style>
+  {/* Controls */}
+  <div className="absolute inset-0 flex items-center justify-between px-4 z-20">
+    <button
+      onClick={prevSlide}
+      className="p-3 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-md transition shadow-md"
+    >
+      <ChevronLeft className="h-7 w-7 text-white" />
+    </button>
+    <button
+      onClick={nextSlide}
+      className="p-3 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-md transition shadow-md"
+    >
+      <ChevronRight className="h-7 w-7 text-white" />
+    </button>
+  </div>
+
+  {/* Dots */}
+  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+    {["img1", "img2", "img3", "img4", "img5", "img6"].map((_, i) => (
+      <button
+        key={i}
+        onClick={() => goToSlide(i)}
+        className={`w-4 h-4 rounded-full transition-all duration-300 ${
+          i === currentSlide
+            ? "bg-yellow-400 scale-110 shadow-lg"
+            : "bg-white/40 hover:bg-white/60"
+        }`}
+      />
+    ))}
+  </div>
 </section>
 
-      {/* Government Schemes Section */}
-      <section className="py-8 bg-white">
-        <div className="container px-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            variants={staggerContainer}
-            viewport={{ once: true }}
-            className="text-center mb-8"
-          >
-            <motion.h2 variants={slideUp} className="text-2xl font-bold mb-2">
-              Government <span className="text-blue-600">Solar Schemes</span>
-            </motion.h2>
-            <motion.p variants={slideUp} className="text-gray-600 max-w-2xl mx-auto">
-              Avail substantial subsidies and benefits on your solar installation
-            </motion.p>
-          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {governmentSchemes.map((scheme, index) => (
-              <motion.div
-                key={index}
-                initial="hidden"
-                whileInView="visible"
-                variants={slideUp}
-                viewport={{ once: true }}
-              >
-                <Card className="hover:shadow-lg transition-shadow h-full">
-                  <CardHeader>
-                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mb-4">
-                      <ShieldCheck className="h-6 w-6 text-blue-600" />
-                    </div>
-                    <CardTitle>{scheme.name}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="mb-4">{scheme.description}</CardDescription>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                        {scheme.subsidy}
-                      </span>
-                      <a
-                        href={scheme.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm font-medium text-blue-600 hover:underline"
-                      >
-                        Learn More
-                      </a>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Government Schemes Section */}
+      <section className="py-12 bg-gradient-to-r from-blue-50 via-white to-blue-50">
+  <div className="container px-4">
+    {/* Section Heading */}
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      variants={staggerContainer}
+      viewport={{ once: true }}
+      className="text-center mb-12"
+    >
+      <motion.h2 variants={slideUp} className="text-3xl font-bold mb-4">
+        Government <span className="text-blue-600">Solar Schemes</span>
+      </motion.h2>
+      <motion.p
+        variants={slideUp}
+        className="text-gray-600 max-w-2xl mx-auto text-lg"
+      >
+        Avail substantial subsidies and benefits on your solar installation
+      </motion.p>
+    </motion.div>
+
+    {/* Scheme Cards */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {governmentSchemes.map((scheme, index) => (
+        <motion.div
+          key={index}
+          initial="hidden"
+          whileInView="visible"
+          variants={slideUp}
+          viewport={{ once: true }}
+        >
+          <Card className="relative h-full rounded-2xl overflow-hidden border border-blue-100 shadow-md hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white/80 via-blue-50/60 to-white/80 backdrop-blur-lg">
+            {/* Accent strip */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-teal-400 to-yellow-400"></div>
+
+            <CardHeader>
+              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-blue-100 mb-4 shadow-inner">
+                <ShieldCheck className="h-7 w-7 text-blue-600" />
+              </div>
+              <CardTitle className="text-lg font-semibold text-gray-800">
+                {scheme.name}
+              </CardTitle>
+            </CardHeader>
+
+            <CardContent>
+              <CardDescription className="mb-4 text-gray-600">
+                {scheme.description}
+              </CardDescription>
+
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full shadow-sm">
+                  {scheme.subsidy}
+                </span>
+                <a
+                  href={scheme.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-semibold text-blue-600 hover:underline"
+                >
+                  Learn More →
+                </a>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+</section>
 
 
 
       {/* Featured Products Section */}
-      <section className="py-8 bg-gray-50">
-        <div className="container px-4">
-          <div className="flex items-center justify-between mb-6">
-            <motion.h2
-              initial="hidden"
-              whileInView="visible"
-              variants={slideUp}
-              viewport={{ once: true }}
-              className="text-2xl font-bold"
-            >
-              Featured Solar Products
-            </motion.h2>
-            <div className="flex gap-2">
-              <button
-                onClick={prevSlide}
-                className="p-2 rounded-full bg-gray-200 hover:bg-gray-300"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-              <button
-                onClick={nextSlide}
-                className="p-2 rounded-full bg-gray-200 hover:bg-gray-300"
-              >
-                <ChevronRight className="h-4 w-4" />
+      <section className="py-12 bg-gray-50">
+  <div className="container mx-auto px-4">
+    {/* Title */}
+    <div className="flex items-center justify-between mb-8">
+      <motion.h2
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+        className="text-3xl font-bold text-gray-900"
+      >
+        Featured Solar Products
+      </motion.h2>
+      <a
+        href="#"
+        className="text-blue-600 font-medium hover:underline text-sm"
+      >
+        View All Products →
+      </a>
+    </div>
+
+    {/* Products Grid */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {[
+        {
+          id: 1,
+          title: "Residential Solar Panel",
+          price: "$899",
+          feature: "5KW Power Output",
+          image: "https://img.icons8.com/fluency/96/solar-panel.png",
+          badge: "Best Seller",
+        },
+        {
+          id: 2,
+          title: "Solar Inverter",
+          price: "$499",
+          feature: "High Efficiency",
+          image: "https://img.icons8.com/color/96/electricity.png",
+          badge: "New Arrival",
+        },
+        {
+          id: 3,
+          title: "Solar Water Pump",
+          price: "$699",
+          feature: "Energy Efficient",
+          image: "https://img.icons8.com/color/96/water-pump.png",
+          badge: "Hot Deal",
+        },
+        {
+          id: 4,
+          title: "Solar Battery",
+          price: "$399",
+          feature: "Long Backup",
+          image: "https://img.icons8.com/color/96/battery-full.png",
+          badge: "Trending",
+        },
+        {
+          id: 5,
+          title: "Solar Street Light",
+          price: "$299",
+          feature: "Auto On/Off",
+          image: "https://img.icons8.com/color/96/street-light.png",
+          badge: "Govt Approved",
+        },
+        {
+          id: 6,
+          title: "Hybrid Solar System",
+          price: "$1499",
+          feature: "On/Off Grid Compatible",
+          image: "https://img.icons8.com/color/96/smart-home-automation.png",
+          badge: "Premium",
+        },
+      ].map((product, index) => (
+        <motion.div
+          key={product.id}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1, duration: 0.5 }}
+          viewport={{ once: true }}
+          className="bg-white rounded-2xl shadow hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col"
+        >
+          {/* Product Image */}
+          <div className="relative bg-gray-50 p-6 flex justify-center">
+            <span className="absolute top-3 left-3 bg-yellow-400 text-xs font-bold px-3 py-1 rounded-full text-gray-900">
+              {product.badge}
+            </span>
+            <img
+              src={product.image}
+              alt={product.title}
+              className="w-24 h-24 object-contain"
+            />
+          </div>
+
+          {/* Product Info */}
+          <div className="p-5 flex flex-col flex-grow">
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+              {product.title}
+            </h3>
+            <p className="text-sm text-teal-600 font-medium">{product.feature}</p>
+
+            <div className="mt-auto">
+              <p className="text-xl font-bold text-blue-600">{product.price}</p>
+              <button className="mt-3 w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+                Buy Now
               </button>
             </div>
           </div>
-
-          <div className="relative h-96 overflow-hidden rounded-lg bg-gradient-to-r from-blue-50 to-teal-50">
-            <AnimatePresence mode='wait'>
-              {featuredProducts.map((product, index) => (
-                index === currentSlide && (
-                  <motion.div
-                    key={product.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="absolute inset-0 p-8 flex flex-col justify-between"
-                  >
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <span className="bg-yellow-400 text-xs font-bold px-2 py-1 rounded text-gray-900">
-                          {product.badge}
-                        </span>
-                        <p className="text-sm text-gray-600 mt-2">{product.description}</p>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded">
-                          GOVT APPROVED
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="text-center">
-                      <h3 className="text-3xl font-bold">{product.title}</h3>
-                      <p className="text-gray-600">{product.tagline}</p>
-                      <p className="text-2xl font-bold mt-2 text-blue-600">{product.price}</p>
-                      <p className="text-teal-600 font-medium">{product.feature}</p>
-                    </div>
-
-                    <div className="flex justify-center gap-2">
-                      {featuredProducts.map((_, i) => (
-                        <button
-                          key={i}
-                          onClick={() => goToSlide(i)}
-                          className={`w-2 h-2 rounded-full ${i === currentSlide ? 'bg-blue-600' : 'bg-gray-300'}`}
-                        />
-                      ))}
-                    </div>
-                  </motion.div>
-                )
-              ))}
-            </AnimatePresence>
-          </div>
-        </div>
-      </section>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+</section>
 
 
       {/* Benefits Section */}
-      <section className="py-8 bg-gray-50">
-        <div className="container px-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            variants={staggerContainer}
-            viewport={{ once: true }}
-            className="text-center mb-8"
-          >
-            <motion.h2 variants={slideUp} className="text-2xl font-bold mb-2">
-              Why Choose <span className="text-teal-600">Solar Energy?</span>
-            </motion.h2>
-            <motion.p variants={slideUp} className="text-gray-600 max-w-2xl mx-auto">
-              Discover the numerous benefits of switching to solar power
-            </motion.p>
-          </motion.div>
+      <section className="py-16 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+  <div className="container px-4 relative z-10">
+    {/* Heading */}
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      variants={staggerContainer}
+      viewport={{ once: true }}
+      className="text-center mb-12"
+    >
+      <motion.h2 
+        variants={slideUp} 
+        className="text-3xl md:text-4xl font-extrabold mb-4 text-gray-900"
+      >
+        Why Choose <span className="bg-gradient-to-r from-teal-500 to-blue-600 bg-clip-text text-transparent">Solar Energy?</span>
+      </motion.h2>
+      <motion.p 
+        variants={slideUp} 
+        className="text-gray-600 max-w-2xl mx-auto text-lg"
+      >
+        Discover the numerous benefits of switching to solar power
+      </motion.p>
+    </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: Sun,
-                title: "Reduce Electricity Bills",
-                description: "Save up to 90% on your monthly electricity expenses",
-                color: "text-yellow-500"
-              },
-              {
-                icon: Battery,
-                title: "Energy Independence",
-                description: "Generate your own power and reduce grid dependency",
-                color: "text-blue-500"
-              },
-              {
-                icon: Home,
-                title: "Increase Property Value",
-                description: "Solar homes sell faster and at higher prices",
-                color: "text-teal-500"
-              },
-              {
-                icon: HardHat,
-                title: "Low Maintenance",
-                description: "Solar systems require minimal maintenance",
-                color: "text-orange-500"
-              },
-              {
-                icon: Clock,
-                title: "Quick Payback",
-                description: "Recoup your investment in 4-6 years typically",
-                color: "text-purple-500"
-              },
-              {
-                icon: Users,
-                title: "Environment Friendly",
-                description: "Reduce your carbon footprint significantly",
-                color: "text-green-500"
-              }
-            ].map((benefit, index) => (
-              <motion.div
-                key={index}
-                initial="hidden"
-                whileInView="visible"
-                variants={slideUp}
-                viewport={{ once: true }}
-              >
-                <Card className="hover:shadow-lg transition-shadow h-full border-0">
-                  <CardContent className="p-6">
-                    <div className={`flex items-center justify-center w-12 h-12 rounded-full bg-${benefit.color.split('-')[1]}-100 mb-4`}>
-                      <benefit.icon className={`h-6 w-6 ${benefit.color}`} />
-                    </div>
-                    <h3 className="text-lg font-bold mb-2">{benefit.title}</h3>
-                    <p className="text-gray-600">{benefit.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+    {/* Grid Benefits */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {[
+        {
+          icon: Sun,
+          title: "Reduce Electricity Bills",
+          description: "Save up to 90% on your monthly electricity expenses",
+          gradient: "from-yellow-400 to-orange-500"
+        },
+        {
+          icon: Battery,
+          title: "Energy Independence",
+          description: "Generate your own power and reduce grid dependency",
+          gradient: "from-blue-500 to-cyan-500"
+        },
+        {
+          icon: Home,
+          title: "Increase Property Value",
+          description: "Solar homes sell faster and at higher prices",
+          gradient: "from-teal-500 to-green-500"
+        },
+        {
+          icon: HardHat,
+          title: "Low Maintenance",
+          description: "Solar systems require minimal maintenance",
+          gradient: "from-orange-500 to-red-500"
+        },
+        {
+          icon: Clock,
+          title: "Quick Payback",
+          description: "Recoup your investment in 4-6 years typically",
+          gradient: "from-purple-500 to-pink-500"
+        },
+        {
+          icon: Users,
+          title: "Environment Friendly",
+          description: "Reduce your carbon footprint significantly",
+          gradient: "from-green-500 to-lime-500"
+        }
+      ].map((benefit, index) => (
+        <motion.div
+          key={index}
+          initial="hidden"
+          whileInView="visible"
+          variants={slideUp}
+          viewport={{ once: true }}
+        >
+          <Card className="h-full border-0 bg-white/80 backdrop-blur-xl shadow-md hover:shadow-xl transition-all duration-300 rounded-2xl">
+            <CardContent className="p-8 flex flex-col items-center text-center">
+              {/* Icon */}
+              <div className={`flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r ${benefit.gradient} shadow-md mb-4`}>
+                <benefit.icon className="h-8 w-8 text-white" />
+              </div>
+              {/* Title */}
+              <h3 className="text-xl font-bold mb-2 text-gray-900">{benefit.title}</h3>
+              {/* Description */}
+              <p className="text-gray-600">{benefit.description}</p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+
+  {/* Decorative Background Circles */}
+  <div className="absolute top-20 left-10 w-40 h-40 bg-teal-100 rounded-full blur-3xl opacity-40"></div>
+  <div className="absolute bottom-20 right-10 w-52 h-52 bg-blue-100 rounded-full blur-3xl opacity-40"></div>
+</section>
+
 
       {/* Process Section */}
-      <section className="py-8 bg-white">
-        <div className="container px-4">
+      <section className="py-16 bg-gradient-to-b from-blue-50 via-white to-blue-50">
+  <div className="container px-6 mx-auto">
+    {/* Heading */}
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      variants={staggerContainer}
+      viewport={{ once: true }}
+      className="text-center mb-14"
+    >
+      <motion.h2
+        variants={slideUp}
+        className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4"
+      >
+        Our Simple <span className="text-blue-600">4-Step Process</span>
+      </motion.h2>
+      <motion.p
+        variants={slideUp}
+        className="text-gray-600 max-w-2xl mx-auto"
+      >
+        From consultation to installation, we make going solar effortless.
+      </motion.p>
+    </motion.div>
+
+    {/* Steps */}
+    <div className="relative">
+      {/* Vertical line in center */}
+      <div className="hidden md:block absolute left-1/2 top-0 h-full w-1 bg-gradient-to-b from-blue-200 via-blue-100 to-transparent transform -translate-x-1/2" />
+
+      <div className="grid md:grid-cols-2 gap-12 md:gap-20">
+        {[
+          {
+            step: "1",
+            title: "Site Assessment",
+            description: "Our experts evaluate your property for solar potential.",
+            icon: Users,
+          },
+          {
+            step: "2",
+            title: "Custom Design",
+            description: "We create a solar system tailored to your needs.",
+            icon: ShieldCheck,
+          },
+          {
+            step: "3",
+            title: "Approvals & Subsidy",
+            description: "We handle all paperwork and subsidy applications.",
+            icon: HardHat,
+          },
+          {
+            step: "4",
+            title: "Installation",
+            description: "Certified technicians install your solar system.",
+            icon: Zap,
+          },
+        ].map((item, index) => (
           <motion.div
+            key={item.step}
             initial="hidden"
             whileInView="visible"
-            variants={staggerContainer}
+            variants={slideUp}
             viewport={{ once: true }}
-            className="text-center mb-8"
+            className={`flex flex-col md:flex-row items-center ${
+              index % 2 === 0
+                ? "md:flex-row-reverse md:text-right"
+                : "md:text-left"
+            }`}
           >
-            <motion.h2 variants={slideUp} className="text-2xl font-bold mb-2">
-              Our Simple <span className="text-blue-600">4-Step Process</span>
-            </motion.h2>
-            <motion.p variants={slideUp} className="text-gray-600 max-w-2xl mx-auto">
-              From consultation to installation, we make going solar effortless
-            </motion.p>
-          </motion.div>
-
-          <div className="relative">
-            <div className="hidden md:block absolute left-1/2 top-0 h-full w-0.5 bg-blue-200 transform -translate-x-1/2" />
-
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16">
-              {[
-                {
-                  step: "1",
-                  title: "Site Assessment",
-                  description: "Our experts evaluate your property for solar potential",
-                  icon: Users
-                },
-                {
-                  step: "2",
-                  title: "Custom Design",
-                  description: "We create a solar system tailored to your needs",
-                  icon: ShieldCheck
-                },
-                {
-                  step: "3",
-                  title: "Approvals & Subsidy",
-                  description: "We handle all paperwork and subsidy applications",
-                  icon: HardHat
-                },
-                {
-                  step: "4",
-                  title: "Installation",
-                  description: "Certified technicians install your solar system",
-                  icon: Zap
-                }
-              ].map((item, index) => (
-                <motion.div
-                  key={item.step}
-                  initial="hidden"
-                  whileInView="visible"
-                  variants={slideUp}
-                  viewport={{ once: true }}
-                  className={`flex ${index % 2 === 0 ? 'md:pr-8 md:text-right md:flex-row-reverse' : 'md:pl-8 md:text-left'}`}
-                >
-                  <div className={`hidden md:block absolute ${index % 2 === 0 ? 'right-1/2' : 'left-1/2'} transform ${index % 2 === 0 ? 'translate-x-6' : '-translate-x-6'} mt-8`}>
-                    <div className="w-5 h-5 rounded-full bg-blue-600 border-4 border-white" />
-                  </div>
-
-                  <div className="flex-1">
-                    <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white mb-4 ${index % 2 === 0 ? 'md:ml-auto' : 'md:mr-auto'}`}>
-                      <span className="text-lg font-bold">{item.step}</span>
-                    </div>
-                    <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                    <p className="text-gray-600">{item.description}</p>
-                  </div>
-                </motion.div>
-              ))}
+            {/* Connector dot */}
+            <div
+              className={`hidden md:flex absolute ${
+                index % 2 === 0 ? "right-1/2 translate-x-6" : "left-1/2 -translate-x-6"
+              }`}
+            >
+              <div className="w-5 h-5 rounded-full bg-blue-600 border-4 border-white shadow-md" />
             </div>
-          </div>
-        </div>
-      </section>
+
+            {/* Step Icon & Number */}
+            <div
+              className={`flex flex-col items-center ${
+                index % 2 === 0 ? "md:items-end" : "md:items-start"
+              }`}
+            >
+              <div className="flex items-center justify-center w-16 h-16 rounded-full bg-blue-600 text-white shadow-lg mb-4 relative">
+                <item.icon className="h-7 w-7" />
+                <span className="absolute -top-3 -right-3 bg-white text-blue-600 font-bold rounded-full w-7 h-7 flex items-center justify-center shadow">
+                  {item.step}
+                </span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                {item.title}
+              </h3>
+              <p className="text-gray-600 max-w-xs">{item.description}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-900 to-teal-800 text-white">
-        <div className="container px-4 text-center">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            variants={staggerContainer}
-            viewport={{ once: true }}
-          >
-            {/* Stats Counter Row */}
-            <motion.div
-              variants={slideUp}
-              className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-12"
-            >
-              <div className="p-4">
-                <div className="text-4xl md:text-5xl font-bold mb-2">
-                  <Counter target={2500} duration={3} />+
-                </div>
-                <p className="text-blue-200">Solar Installations</p>
-              </div>
-              <div className="p-4">
-                <div className="text-4xl md:text-5xl font-bold mb-2">
-                  <Counter target={3500} duration={3} />+
-                </div>
-                <p className="text-blue-200">Happy Customers</p>
-              </div>
-              <div className="p-4">
-                <div className="text-4xl md:text-5xl font-bold mb-2">
-                  <Counter target={15} duration={3} /> MW
-                </div>
-                <p className="text-blue-200">Clean Energy Generated</p>
-              </div>
-            </motion.div>
+    {/* CTA Section */}
+<section className="relative py-20 bg-gradient-to-r from-blue-900 via-blue-800 to-teal-700 text-white overflow-hidden">
+  {/* Decorative Background */}
+  <div className="absolute inset-0">
+    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+  </div>
 
-            {/* CTA Content */}
-            <motion.h2 variants={slideUp} className="text-2xl md:text-3xl font-bold mb-4">
-              Ready to Switch to Solar?
-            </motion.h2>
-            <motion.p variants={slideUp} className="text-xl mb-8 max-w-2xl mx-auto">
-              Get a free consultation and discover how much you can save
-            </motion.p>
-            <motion.div variants={slideUp} className="flex flex-wrap justify-center gap-4">
-              <Link to="/quote">
-                <Button className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 px-8 py-6 text-lg">
-                  Get Free Quote
-                </Button>
-              </Link>
-              <Link to="/contact">
-                <Button variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-6 text-lg">
-                  Call Now: 1800-123-4567
-                </Button>
-              </Link>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
+  <div className="relative container px-4 text-center">
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      variants={staggerContainer}
+      viewport={{ once: true }}
+    >
+      {/* Stats Counter Row */}
+      <motion.div
+        variants={slideUp}
+        className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-16"
+      >
+        {[
+          { target: 2500, label: "Solar Installations" },
+          { target: 3500, label: "Happy Customers" },
+          { target: 15, label: "MW Clean Energy Generated" }
+        ].map((stat, i) => (
+          <div
+            key={i}
+            className="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg hover:shadow-2xl transition"
+          >
+            <div className="text-5xl font-extrabold text-yellow-400 mb-2">
+              <Counter target={stat.target} duration={3} />{i === 2 ? " MW" : "+"}
+            </div>
+            <p className="text-blue-100 text-lg">{stat.label}</p>
+          </div>
+        ))}
+      </motion.div>
+
+      {/* CTA Content */}
+      <motion.h2
+        variants={slideUp}
+        className="text-3xl md:text-4xl font-extrabold mb-6 leading-snug"
+      >
+        Power Your Future with <span className="text-yellow-400">Solar Energy</span>
+      </motion.h2>
+      <motion.p
+        variants={slideUp}
+        className="text-lg md:text-xl mb-10 max-w-3xl mx-auto text-blue-100"
+      >
+        Get a free consultation today and discover how much you can save while making the planet greener.
+      </motion.p>
+
+      {/* CTA Buttons */}
+      <motion.div
+        variants={slideUp}
+        className="flex flex-wrap justify-center gap-6"
+      >
+        <Link to="/quote">
+          <Button className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-10 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-yellow-400/50 transition-all duration-300">
+            Get Free Quote
+          </Button>
+        </Link>
+        <Link to="/contact">
+          <Button
+            variant="outline"
+            className="border-2 border-white text-white hover:bg-white hover:text-gray-900 px-10 py-6 text-lg font-semibold rounded-xl shadow-lg transition-all duration-300"
+          >
+            📞 Call Now: 1800-123-4567
+          </Button>
+        </Link>
+      </motion.div>
+    </motion.div>
+  </div>
+</section>
+
     </div>
   );
 };
