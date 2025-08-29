@@ -1841,52 +1841,62 @@ const AdminDashboard = () => {
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Admin Login
-            </h2>
-          </div>
-          <form className="mt-8 space-y-6" onSubmit={login}>
-            <div className="rounded-md shadow-sm -space-y-px">
-              <div>
-                <Input
-                  id="username"
-                  name="username"
-                  type="text"
-                  required
-                  placeholder="Username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="relative block w-full rounded-t-md rounded-b-none"
-                />
-              </div>
-              <div>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="relative block w-full rounded-b-md rounded-t-none"
-                />
-              </div>
-            </div>
-
-            <div>
-              <Button
-                type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Sign in
-              </Button>
-            </div>
-          </form>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 via-white to-blue-100 px-4">
+      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 space-y-6">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-gray-900">Admin Login</h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Please sign in to access your dashboard
+          </p>
         </div>
+    
+        <form className="mt-6 space-y-5" onSubmit={login}>
+          <div className="space-y-4">
+            <Input
+              id="username"
+              name="username"
+              type="text"
+              required
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              required
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+    
+          <div className="flex items-center justify-between text-sm">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+              />
+              Remember me
+            </label>
+            <a href="#" className="text-blue-600 hover:underline">
+              Forgot password?
+            </a>
+          </div>
+    
+          <Button
+            type="submit"
+            className="w-full py-3 text-sm font-semibold rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-lg transition-all duration-200"
+          >
+            Sign In
+          </Button>
+        </form>
       </div>
+    </div>
+    
     );
   }
 
