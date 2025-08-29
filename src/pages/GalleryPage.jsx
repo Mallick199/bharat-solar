@@ -129,10 +129,8 @@ const GalleryPage = () => {
                 <img  
                   className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                   alt={project.alt || project.title}
-                  src={`http://localhost:3001${project.imageUrl}`} 
-                  onError={(e) => {
-                    e.target.src = 'https://via.placeholder.com/400x300?text=Image+Not+Found';
-                  }}
+                  src={`http://localhost:3001/uploads/${project.imageUrl.split('/').pop()}`}
+                 
                 />
                 <div className="absolute top-2 right-2 bg-black/50 text-white p-2 rounded-full">
                   {project.type === 'photo' ? <Camera size={20} /> : <Video size={20} />}

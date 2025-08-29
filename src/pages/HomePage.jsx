@@ -459,7 +459,7 @@ const handleCategoryClick = (categoryName) => {
         Featured Solar Products
       </motion.h2>
       <a
-        href="#"
+        href="/solar-products"
         className="text-blue-600 font-medium hover:underline text-sm"
       >
         View All Products →
@@ -501,9 +501,11 @@ const handleCategoryClick = (categoryName) => {
 
               <div className="mt-auto">
                 <p className="text-xl font-bold text-blue-600">{product.priceRange}</p>
+                <Link to="/contact">
                 <button className="mt-3 w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-                  Buy Now
+                Contact Us
                 </button>
+                </Link>
               </div>
             </div>
           </motion.div>

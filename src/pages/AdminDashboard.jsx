@@ -179,6 +179,153 @@ const AdminDashboard = () => {
   });
   const [expandedApplication, setExpandedApplication] = useState(null);
 
+   // State for gallery management
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [newGalleryItem, setNewGalleryItem] = useState({
+    title: '',
+    description: '',
+    category: 'Residential',
+    location: '',
+    type: 'photo'
+  });
+  const [galleryFile, setGalleryFile] = useState(null);
+  const [showGalleryForm, setShowGalleryForm] = useState(false);
+  const [editingGalleryItem, setEditingGalleryItem] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      setIsLoggedIn(true);
+      fetchImages();
+      fetchUsers();
+      
+      // Fetch products if on product section
+      if (activeSection === 'product') {
+        fetchProducts();
+      }
+      
+      // Fetch jobs and applications if on career section
+      if (activeSection === 'career') {
+        fetchJobs();
+        fetchApplications();
+      }
+      
+      // Fetch gallery items if on gallery section
+      if (activeSection === 'settings') {
+        fetchGalleryItems();
+      }
+    }
+  }, [activeSection]);
+
+  // Add gallery functions
+  const fetchGalleryItems = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/gallery');
+      if (response.ok) {
+        const data = await response.json();
+        setGalleryItems(data.galleryItems || []);
+      }
+    } catch (error) {
+      console.error('Error fetching gallery items:', error);
+    }
+  };
+
+  const handleGalleryUpload = (e) => {
+    setGalleryFile(e.target.files[0]);
+  };
+
+  const uploadGalleryItem = async () => {
+    if (!galleryFile) {
+      alert('Please select a file');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const token = localStorage.getItem('adminToken');
+      const formData = new FormData();
+      formData.append('media', galleryFile);
+      formData.append('title', newGalleryItem.title);
+      formData.append('description', newGalleryItem.description);
+      formData.append('category', newGalleryItem.category);
+      formData.append('location', newGalleryItem.location);
+      formData.append('type', newGalleryItem.type);
+
+      const endpoint = editingGalleryItem 
+        ? `http://localhost:3001/api/gallery/${editingGalleryItem._id}`
+        : 'http://localhost:3001/api/gallery';
+
+      const response = await fetch(endpoint, {
+        method: editingGalleryItem ? 'PUT' : 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData
+      });
+
+      if (response.ok) {
+        alert(`Gallery item ${editingGalleryItem ? 'updated' : 'created'} successfully`);
+        resetGalleryForm();
+        fetchGalleryItems();
+      } else {
+        alert('Operation failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Operation error');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const deleteGalleryItem = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this gallery item?')) return;
+    
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`http://localhost:3001/api/gallery/${id}/hard`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.ok) {
+        alert('Gallery item deleted successfully');
+        fetchGalleryItems();
+      } else {
+        alert('Delete failed');
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      alert('Delete error');
+    }
+  };
+
+  const resetGalleryForm = () => {
+    setNewGalleryItem({
+      title: '',
+      description: '',
+      category: 'Residential',
+      location: '',
+      type: 'photo'
+    });
+    setGalleryFile(null);
+    setEditingGalleryItem(null);
+    setShowGalleryForm(false);
+    if (document.getElementById('gallery-file-input')) {
+      document.getElementById('gallery-file-input').value = '';
+    }
+  };
+
+  const editGalleryItem = (item) => {
+    setEditingGalleryItem(item);
+    setNewGalleryItem({
+      title: item.title,
+      description: item.description,
+      category: item.category,
+      location: item.location,
+      type: item.type
+    });
+    setShowGalleryForm(true);
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
     if (token) {
@@ -1512,18 +1659,183 @@ const AdminDashboard = () => {
     </>
   );
       
-      default:
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle> Soon</CardTitle>
-              <CardDescription>This section is under development</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>The {activeSection} management section will be available soon.</p>
-            </CardContent>
-          </Card>
-        );
+  case 'settings':
+    return (
+      <>
+        {!showGalleryForm ? (
+          <>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold">Gallery Management</h2>
+              <Button onClick={() => setShowGalleryForm(true)}>
+                <Plus className="mr-2 h-4 w-4" /> Add New Item
+              </Button>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Gallery Items</CardTitle>
+                <CardDescription>Manage your gallery photos and videos</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {galleryItems.map((item) => (
+                    <div key={item._id} className="border rounded-lg overflow-hidden">
+                      <div className="relative aspect-video bg-gray-200">
+                        {item.type === 'photo' ? (
+                          <img 
+                            src={`http://localhost:3001${item.imageUrl}`} 
+                            alt={item.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center h-full">
+                            <span className="text-gray-500">Video File</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-medium">{item.title}</h3>
+                        <p className="text-sm text-gray-600">{item.category} • {item.location}</p>
+                        <p className="text-sm mt-1 line-clamp-2">{item.description}</p>
+                        <div className="flex justify-end space-x-2 mt-3">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => editGalleryItem(item)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => deleteGalleryItem(item._id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        ) : (
+          <>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold">
+                {editingGalleryItem ? 'Edit Gallery Item' : 'Add New Gallery Item'}
+              </h2>
+              <Button variant="outline" onClick={resetGalleryForm}>
+                ← Back to Gallery
+              </Button>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Gallery Item Details</CardTitle>
+                <CardDescription>
+                  {editingGalleryItem ? 'Update the gallery item' : 'Add a new photo or video to your gallery'}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+                      <Input
+                        type="text"
+                        placeholder="e.g., Solar Installation Project"
+                        value={newGalleryItem.title}
+                        onChange={(e) => setNewGalleryItem({...newGalleryItem, title: e.target.value})}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
+                      <select
+                        value={newGalleryItem.category}
+                        onChange={(e) => setNewGalleryItem({...newGalleryItem, category: e.target.value})}
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Industrial">Industrial</option>
+                        <option value="Installation Process">Installation Process</option>
+                        <option value="Before & After">Before & After</option>
+                        <option value="Testimonials">Testimonials</option>
+                        <option value="Battery Systems">Battery Systems</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Location *</label>
+                      <Input
+                        type="text"
+                        placeholder="e.g., San Francisco, CA"
+                        value={newGalleryItem.location}
+                        onChange={(e) => setNewGalleryItem({...newGalleryItem, location: e.target.value})}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Media Type *</label>
+                      <select
+                        value={newGalleryItem.type}
+                        onChange={(e) => setNewGalleryItem({...newGalleryItem, type: e.target.value})}
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="photo">Photo</option>
+                        <option value="video">Video</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <Textarea
+                      placeholder="Describe this gallery item..."
+                      value={newGalleryItem.description}
+                      onChange={(e) => setNewGalleryItem({...newGalleryItem, description: e.target.value})}
+                      rows={3}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {newGalleryItem.type === 'photo' ? 'Image' : 'Video'} File *
+                    </label>
+                    <Input
+                      id="gallery-file-input"
+                      type="file"
+                      accept={newGalleryItem.type === 'photo' ? 'image/*' : 'video/*'}
+                      onChange={handleGalleryUpload}
+                    />
+                    {editingGalleryItem && !galleryFile && (
+                      <p className="text-sm text-gray-500 mt-1">
+                        Current file will be kept if no new file is selected
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex justify-end space-x-4">
+                    <Button variant="outline" onClick={resetGalleryForm}>
+                      Cancel
+                    </Button>
+                    <Button 
+                      onClick={uploadGalleryItem}
+                      disabled={uploading || !newGalleryItem.title || !newGalleryItem.location || (!galleryFile && !editingGalleryItem)}
+                    >
+                      {uploading ? 'Saving...' : editingGalleryItem ? 'Update Item' : 'Add to Gallery'}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
+      </>
+    );
     }
   };
 
