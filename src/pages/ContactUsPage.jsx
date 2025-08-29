@@ -279,7 +279,14 @@ const ContactUsPage = () => {
               <Phone className="h-5 w-5 mr-2" /> Call Now: 7377899573
             </Button>
             <Button size="lg" className="bg-yellow-400 text-emerald-900 hover:bg-yellow-500 font-bold">
-              <Mail className="h-5 w-5 mr-2" /> Email Us
+              <div className="flex items-start">
+                <div>
+                  <h3 className="font-semibold text-foreground">WhatsApp:</h3>
+                  <a href="https://wa.me/7377899573" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-emerald-600 transition-colors">
+                    Chat with us on WhatsApp
+                  </a>
+                </div>
+              </div>
             </Button>
           </div>
         </div>
